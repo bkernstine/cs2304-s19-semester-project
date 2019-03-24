@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors'); //8080
-const blabs = require('./data');
+const blabs = [];
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
