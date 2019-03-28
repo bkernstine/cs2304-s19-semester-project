@@ -3,10 +3,11 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const cors = require('cors'); //8080
+const cors = require('cors'); 
 const blabs = [];
 
-app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(bodyParser.json());
 app.use(cors());
 
 //GET
@@ -38,10 +39,10 @@ app.get('/blabs/:id', (request, response) => {
 app.post('/blabs', (request, response) => {
     const blab = {
         id: blabs.length+1,
-        posttime: new Date(),
+        postTime: Date.now() / 1000,
         author:{
-            email: request.body.email,
-            name: request.body.name
+            email: request.body.author.email,
+            name: request.body.author.name
         },
         message: request.body.message
     }
@@ -80,14 +81,9 @@ app.delete('/blabs/:id', (request, response) => {
 
 
 
-
-
 const hostname =  'localhost';
 const port = 3000;
-
-
-
-app.listen(port, hostname, () => {
+app.listen(port, () => {
     console.log(`Server is running at http://${hostname}:${port}`)
 });
 

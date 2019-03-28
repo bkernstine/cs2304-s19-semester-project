@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+  api:
+    build: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: "npm run dev"
+    working_dir: /app
+    ports: 
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    labels:
+      traefik.backend: "api"
+      traefik.frontend.rule: "PathPrefix:/api"
+      traefik.frontend.rule: "PathPrefixStrip:/api"
+      traefik.port: "3000"
+      
+  reverse-proxy:
+    image: traefik
+    ports:
+      - "80:80"
+      - "8080:8080"
+    command: --api --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  client:
+    image: vtcs2304s19/blabber-client
+    labels:
+      traefik.backend: "client"
+      traefik.port: "80"
+      traefik.frontend.rule: "Host:front.docker.localhost"
+      traefik.frontend.rule: "PathPrefix:/"
+
+    
